@@ -1,6 +1,7 @@
 package com.hyecheon.tobyspring.user.dao
 
 import com.hyecheon.tobyspring.user.domain.User
+import java.sql.Connection
 import java.sql.DriverManager
 
 /**
@@ -10,8 +11,7 @@ import java.sql.DriverManager
  */
 class UserDao {
     fun add(user: User) = run {
-        Class.forName("org.mariadb.jdbc.Driver")
-        DriverManager.getConnection("jdbc:mariadb://localhost:3306/toby", "root", "hclee").use { c ->
+        getConnection().use { c ->
             c.prepareStatement("insert into users(id, name, password) values (?,?,?)").use { ps ->
                 ps.setString(1, user.id)
                 ps.setString(2, user.name)
@@ -23,8 +23,7 @@ class UserDao {
     }
 
     fun get(id: String) = run {
-        Class.forName("org.mariadb.jdbc.Driver")
-        DriverManager.getConnection("jdbc:mariadb://localhost:3306/toby", "root", "hclee").use { c ->
+        getConnection().use { c ->
             c.prepareStatement("select * from users where id=?").use { ps ->
                 ps.setString(1, id)
                 ps.executeQuery().use { rs ->
@@ -37,5 +36,10 @@ class UserDao {
                 }
             }
         }
+    }
+
+    fun getConnection(): Connection = run {
+        Class.forName("org.mariadb.jdbc.Driver")
+        DriverManager.getConnection("jdbc:mariadb://localhost:3306/toby", "root", "hclee")
     }
 }
