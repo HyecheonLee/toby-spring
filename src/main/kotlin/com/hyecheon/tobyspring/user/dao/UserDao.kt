@@ -10,11 +10,13 @@ import java.sql.DriverManager
  * Date: 2021/06/28
  */
 abstract class UserDao {
-    private val simpleConnectionMaker: SimpleConnectionMaker = SimpleConnectionMaker()
+    private val connectionMaker: ConnectionMaker by lazy {
+        DConnectionMaker()
+    }
 
 
     fun add(user: User) = run {
-        simpleConnectionMaker.makeNewConnection().use { c ->
+        connectionMaker.makeConnection().use { c ->
             c.prepareStatement("insert into users(id, name, password) values (?,?,?)").use { ps ->
                 ps.setString(1, user.id)
                 ps.setString(2, user.name)
@@ -26,7 +28,7 @@ abstract class UserDao {
     }
 
     fun get(id: String) = run {
-        simpleConnectionMaker.makeNewConnection().use { c ->
+        connectionMaker.makeConnection().use { c ->
             c.prepareStatement("select * from users where id=?").use { ps ->
                 ps.setString(1, id)
                 ps.executeQuery().use { rs ->
