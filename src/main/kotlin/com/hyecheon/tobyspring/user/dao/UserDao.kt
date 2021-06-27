@@ -9,7 +9,7 @@ import java.sql.DriverManager
  * Email: rainbow880616@gmail.com
  * Date: 2021/06/28
  */
-class UserDao {
+abstract class UserDao {
     fun add(user: User) = run {
         getConnection().use { c ->
             c.prepareStatement("insert into users(id, name, password) values (?,?,?)").use { ps ->
@@ -38,8 +38,5 @@ class UserDao {
         }
     }
 
-    fun getConnection(): Connection = run {
-        Class.forName("org.mariadb.jdbc.Driver")
-        DriverManager.getConnection("jdbc:mariadb://localhost:3306/toby", "root", "hclee")
-    }
+    abstract fun getConnection(): Connection
 }
