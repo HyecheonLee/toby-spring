@@ -2,18 +2,13 @@ package com.hyecheon.tobyspring.user.dao
 
 import com.hyecheon.tobyspring.user.domain.User
 import java.sql.Connection
-import java.sql.DriverManager
 
 /**
  * User: hyecheon lee
  * Email: rainbow880616@gmail.com
  * Date: 2021/06/28
  */
-abstract class UserDao {
-    private val connectionMaker: ConnectionMaker by lazy {
-        DConnectionMaker()
-    }
-
+class UserDao(private val connectionMaker: ConnectionMaker) {
 
     fun add(user: User) = run {
         connectionMaker.makeConnection().use { c ->
@@ -42,6 +37,4 @@ abstract class UserDao {
             }
         }
     }
-
-    abstract fun getConnection(): Connection
 }
