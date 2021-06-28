@@ -7,7 +7,18 @@ package com.hyecheon.tobyspring.user.dao
  */
 class DaoFactory {
     fun userDao(): UserDao {
-        val connectionMaker = DConnectionMaker()
-        return UserDao(connectionMaker)
+        return UserDao(connectionMaker())
+    }
+
+    fun accountDao(): AccountDao {
+        return AccountDao(connectionMaker())
+    }
+
+    fun messageDao(): MessageDao {
+        return MessageDao(connectionMaker())
+    }
+
+    fun connectionMaker(): ConnectionMaker {
+        return DConnectionMaker()
     }
 }
